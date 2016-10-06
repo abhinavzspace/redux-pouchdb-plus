@@ -1,5 +1,5 @@
 {
-  "name": "redux-pouchdb-plus",
+  "name": "@abhinavzspace/redux-pouchdb-plus",
   "version": "0.8.1",
   "description": "Synchronize Redux store with PouchDB to have a persistent store.",
   "main": "lib/index.js",
@@ -43,7 +43,7 @@
     "timeout-then": "^1.0.0"
   },
   "peerDependencies": {
-    "pouchdb": "^5.2.0",
+    "pouchdb": "^6.0.6",
     "immutable": "^3.7.6"
   },
   "dependencies": {
