@@ -180,13 +180,13 @@ export const persistentReducer = (reducer, reducerOptions={}) => {
   }
   function toPouch(x) {
     if (immutable)
-      return JSON.parse(transit.toJSON(x));
+      return x.toJS();
     else
       return cloneDeep(x);
   }
   function fromPouch(x) {
     if (immutable)
-      return transit.fromJSON(JSON.stringify(x));
+      return Immutable.fromJS(x);
     else
       return cloneDeep(x);
   }
