@@ -279,7 +279,7 @@ test('should update reducer state when db was changed (simulates replication)', 
   });
 });
 
-test('should work with immutable js data types', t => {
+/*test('should work with immutable js data types', t => {
   t.plan(5);
 
   const db = new PouchDB('testdb', {db : require('memdown')});
@@ -310,6 +310,39 @@ test('should work with immutable js data types', t => {
   }).then(() => {
     t.ok(true);
   });
+});*/
+
+test('should work with immutable js data types', t => {
+    t.plan(5);
+
+    const db = new PouchDB('testdb', {db : require('memdown')});
+    const createPersistentStore = persistentStore({db})(createStore);
+    const reducer = setupImmutableReducer();
+    const finalReducer = persistentReducer(reducer);
+    const store = createPersistentStore(finalReducer);
+
+    timeout(500).then(() => {
+        t.equal(store.getState().get('x'), 5);
+        return db.get(reducer.name);
+    }).then(doc => {
+        const immutableState = Immutable.fromJS(doc.state);
+        t.equal(store.getState().get('x'), immutableState.get('x'));
+    }).then(() => {
+        store.dispatch({
+            type: INCREMENT
+        });
+        return timeout(500);
+    }).then(() => {
+        t.equal(store.getState().get('x'), 6);
+        return db.get(reducer.name);
+    }).then(doc => {
+        const immutableState = Immutable.fromJS(doc.state);
+        t.equal(store.getState().get('x'), immutableState.get('x'));
+    }).then(() => {
+        return db.destroy();
+    }).then(() => {
+        t.ok(true);
+    });
 });
 
 test('onReady callback should get called correctly', t => {
